@@ -71,7 +71,7 @@ pipeline {
 		      source ~/.profile
 		      echo "$password" | sudo -kS docker build -t samplewebapp:${DOCKER_TAG} .
                       echo "$password" | sudo -kS docker tag samplewebapp:${DOCKER_TAG} kishanth1994/samplewebapp:${DOCKER_TAG}
-		      cat /var/lib/jenkins/secrets/docker_password.txt | docker login --username kishanth1994 --password-stdin
+		      cat /var/lib/jenkins/secrets/docker_password.txt | sudo -kS docker login --username kishanth1994 --password-stdin
 		   '''
           }
         }
