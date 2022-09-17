@@ -76,7 +76,8 @@ pipeline {
             steps {
             withDockerRegistry([ credentialsId: "dockerHub", url: "" ]) {
             sh 'docker push kishanth1994/samplewebapp:${DOCKER_TAG}'
-			sh 'docker rmi kishanth1994/samplewebapp:${DOCKER_TAG}'
+			sh 'docker rmi -f kishanth1994/samplewebapp:${DOCKER_TAG}'
+			sh 'docker rmi -f samplewebapp:${DOCKER_TAG}'
             }        
          }
       }
