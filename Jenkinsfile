@@ -68,6 +68,8 @@ pipeline {
     stage('Docker Build and Tag') {
            steps {
                 sh '''
+		      echo $WORKSPACE
+		      mv target/*.war target/LoginWebApp.war
 		      source ~/.profile
 		      echo "$password" | sudo -kS docker build -t samplewebapp:${DOCKER_TAG} .
                       echo "$password" | sudo -kS docker tag samplewebapp:${DOCKER_TAG} kishanth1994/samplewebapp:${DOCKER_TAG}
@@ -124,10 +126,10 @@ pipeline {
     }
 	
 	post {
-	  always {
-	    echo 'Deleting the Workspace'
-	    deleteDir() /* Clean Up our Workspace */
-	  }
+	  //always {
+	    //echo 'Deleting the Workspace'
+	    //deleteDir() /* Clean Up our Workspace */
+	  //}
 	    success {
 		mail to: 'devopsawsfreetier@gmail.com',
 		  subject: "Success Build Pipeline: ${currentBuild.fullDisplayName}",
