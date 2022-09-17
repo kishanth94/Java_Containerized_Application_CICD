@@ -67,17 +67,23 @@ pipeline {
 	
     stage('Docker Build and Tag') {
            steps {
-                sh 'docker build -t samplewebapp:${DOCKER_TAG} .' 
-                sh 'docker tag samplewebapp:${DOCKER_TAG} kishanth1994/samplewebapp:${DOCKER_TAG}'   
+                sh '''
+		      source ~/.profile
+		      echo "$password" | sudo -kS docker build -t samplewebapp:${DOCKER_TAG} .
+                      echo "$password" | sudo -kS docker tag samplewebapp:${DOCKER_TAG} kishanth1994/samplewebapp:${DOCKER_TAG}
+		   '''
           }
         }
      
     stage('Publish image to Docker Hub') {
             steps {
             withDockerRegistry([ credentialsId: "dockerHub", url: "" ]) {
-            sh 'docker push kishanth1994/samplewebapp:${DOCKER_TAG}'
-			sh 'docker rmi -f kishanth1994/samplewebapp:${DOCKER_TAG}'
-			sh 'docker rmi -f samplewebapp:${DOCKER_TAG}'
+                sh '''
+		     source ~/.profile
+		     echo "$password" | sudo -kS docker push kishanth1994/samplewebapp:${DOCKER_TAG}
+	             echo "$password" | sudo -kS docker rmi -f kishanth1994/samplewebapp:${DOCKER_TAG}
+	             echo "$password" | sudo -kS docker rmi -f samplewebapp:${DOCKER_TAG}
+		   '''
             }        
          }
       }
