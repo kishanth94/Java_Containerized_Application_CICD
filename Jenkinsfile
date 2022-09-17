@@ -117,7 +117,7 @@ pipeline {
 	 stage('Deploying application on k8s cluster from ansible-server using playbook') {
             steps {
                script{
-			        sh 'ssh -o StrictHostKeyChecking=no -i /var/lib/jenkins/.ssh/id_rsa ansadmin@172.31.26.189 "kubectl config get-contexts; kubectl config use-context arn:aws:eks:eu-west-1:999474717263:cluster/eks-demo-cluster; whoami && hostname; ansible-playbook /etc/ansible/kubernetes/playbook-deployment-service.yaml; sudo rm -rf /etc/ansible/kubernetes/*.yaml;"'   
+			        sh 'ssh -o StrictHostKeyChecking=no -i /var/lib/jenkins/.ssh/id_rsa ansadmin@172.31.26.189 "/home/ansadmin/bin/kubectl config get-contexts; /home/ansadmin/bin/kubectl config use-context arn:aws:eks:eu-west-1:999474717263:cluster/eks-demo-cluster; whoami && hostname; ansible-playbook /etc/ansible/kubernetes/playbook-deployment-service.yaml; sudo rm -rf /etc/ansible/kubernetes/*.yaml;"'   
                }
             }
         }
