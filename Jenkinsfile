@@ -77,9 +77,10 @@ pipeline {
      
     stage('Publish image to Docker Hub') {
             steps {
-            withDockerRegistry([ credentialsId: "dockerHub", url: "" ]) {
+              script{ 
                 sh '''
 		     source ~/.profile
+		     cat /var/lib/jenkins/secrets/docker_password.txt | docker login --username kishanth1994 --password-stdin
 		     echo "$password" | sudo -kS docker push kishanth1994/samplewebapp:${DOCKER_TAG}
 	             echo "$password" | sudo -kS docker rmi -f kishanth1994/samplewebapp:${DOCKER_TAG}
 	             echo "$password" | sudo -kS docker rmi -f samplewebapp:${DOCKER_TAG}
