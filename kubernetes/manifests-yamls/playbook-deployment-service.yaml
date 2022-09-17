@@ -8,8 +8,8 @@
   tasks: 
   - name: create a deployment
     shell: |
-      kubectl --kubeconfig=/home/ansadmin/.kube/config apply -f /etc/ansible/kubernetes/deployment.yaml
+      /home/ansadmin/bin/kubectl --kubeconfig=/home/ansadmin/.kube/config apply -f /etc/ansible/kubernetes/deployment.yaml
     
   - name: create a service
     shell: |
-      kubectl --kubeconfig=/home/ansadmin/.kube/config apply -f /etc/ansible/kubernetes/service.yaml
+      /home/ansadmin/bin/kubectl --kubeconfig=/home/ansadmin/.kube/config apply -f /etc/ansible/kubernetes/service.yaml
