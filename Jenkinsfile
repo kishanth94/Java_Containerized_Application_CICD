@@ -3,7 +3,7 @@ pipeline {
 	environment{
 	    ENVIRONMENT = 'PROD'
 	    TIME_STAMP = new java.text.SimpleDateFormat('yyyy_MM_dd').format(new Date())
-        DOCKER_TAG = "${ENVIRONMENT}_${TIME_STAMP}_${env.BUILD_NUMBER}"
+            DOCKER_TAG = "${ENVIRONMENT}_${TIME_STAMP}_${env.BUILD_NUMBER}"
     }
 	
  stages {
@@ -71,6 +71,7 @@ pipeline {
 		      source ~/.profile
 		      echo "$password" | sudo -kS docker build -t samplewebapp:${DOCKER_TAG} .
                       echo "$password" | sudo -kS docker tag samplewebapp:${DOCKER_TAG} kishanth1994/samplewebapp:${DOCKER_TAG}
+		      cat /var/lib/jenkins/secrets/docker_password.txt | docker login --username kishanth1994 --password-stdin
 		   '''
           }
         }
@@ -80,7 +81,6 @@ pipeline {
               script{ 
                 sh '''
 		     source ~/.profile
-		     cat /var/lib/jenkins/secrets/docker_password.txt | echo "$password" | sudo -kS docker login --username kishanth1994 --password-stdin
 		     echo "$password" | sudo -kS docker push kishanth1994/samplewebapp:${DOCKER_TAG}
 	             echo "$password" | sudo -kS docker rmi -f kishanth1994/samplewebapp:${DOCKER_TAG}
 	             echo "$password" | sudo -kS docker rmi -f samplewebapp:${DOCKER_TAG}
@@ -95,9 +95,9 @@ pipeline {
 				    echo "${WORKSPACE}"
 					echo "${DOCKER_TAG}"
 					        sh '''
-							     source ~/.profile
-								 echo "$password" | sudo -kS grep -irl {DOCKER_TAG} ${WORKSPACE}/kubernetes/manifests-yamls/deployment.yaml | xargs sed -i "s/{DOCKER_TAG}/${DOCKER_TAG}/g"
-								 echo "$password" | sudo -kS scp -o StrictHostKeyChecking=no -i /var/lib/jenkins/.ssh/id_rsa ${WORKSPACE}/kubernetes/manifests-yamls/*.yaml ansadmin@172.31.26.189:/etc/ansible/kubernetes/
+					         source ~/.profile
+						 echo "$password" | sudo -kS grep -irl {DOCKER_TAG} ${WORKSPACE}/kubernetes/manifests-yamls/deployment.yaml | xargs sed -i "s/{DOCKER_TAG}/${DOCKER_TAG}/g"
+						 echo "$password" | sudo -kS scp -o StrictHostKeyChecking=no -i /var/lib/jenkins/.ssh/id_rsa ${WORKSPACE}/kubernetes/manifests-yamls/*.yaml ansadmin@172.31.26.189:/etc/ansible/kubernetes/
 							'''     
 				}
             }
@@ -113,15 +113,14 @@ pipeline {
                 }
             }
         }
-	/*	
+	
 	 stage('Deploying application on k8s cluster from ansible-server using playbook') {
             steps {
                script{
-			        sh 'ssh -o StrictHostKeyChecking=no -i /var/lib/jenkins/.ssh/id_rsa ansadmin@172.31.26.189 "kubectl config get-contexts; kubectl config use-context kubernetes-admin@kubernetes; whoami && hostname; ansible-playbook /etc/ansible/kubernetes/playbook-deployment-service.yaml; sudo rm -rf /etc/ansible/kubernetes/*.yaml;"'   
+			        sh 'ssh -o StrictHostKeyChecking=no -i /var/lib/jenkins/.ssh/id_rsa ansadmin@172.31.26.189 "kubectl config get-contexts; kubectl config use-context arn:aws:eks:eu-west-1:999474717263:cluster/eks-demo-cluster; whoami && hostname; ansible-playbook /etc/ansible/kubernetes/playbook-deployment-service.yaml; sudo rm -rf /etc/ansible/kubernetes/*.yaml;"'   
                }
             }
         }
-	*/
     }
 	
 	post {
