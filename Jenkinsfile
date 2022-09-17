@@ -126,10 +126,10 @@ pipeline {
     }
 	
 	post {
-	  //always {
-	    //echo 'Deleting the Workspace'
-	    //deleteDir() /* Clean Up our Workspace */
-	  //}
+	  always {
+	    echo 'Deleting the Workspace'
+	    deleteDir() /* Clean Up our Workspace */
+	  }
 	    success {
 		mail to: 'devopsawsfreetier@gmail.com',
 		  subject: "Success Build Pipeline: ${currentBuild.fullDisplayName}",
